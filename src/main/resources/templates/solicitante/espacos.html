@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout :: head('Espaços Disponíveis')"></head>
+<body>
+    <header th:replace="fragments/layout :: menu('espacos')"></header>
+    
+    <div class="container mt-4">
+        <h2>Espaços Disponíveis</h2>
+        
+        <div class="row mt-4">
+            <div class="col-md-4 mb-4" th:each="espaco : ${espacos}">
+                <div class="card h-100">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="card-title mb-0" th:text="${espaco.nomeEspaco}">Nome do Espaço</h5>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Tipo:</strong> <span th:text="${espaco.tipoEspaco}">Tipo</span></p>
+                        <p><strong>Capacidade:</strong> <span th:text="${espaco.capacidade} + ' pessoas'">Capacidade</span></p>
+                        <p><strong>Localização:</strong> <span th:text="${espaco.localizacao}">Localização</span></p>
+                        <p><strong>Metragem:</strong> <span th:text="${espaco.metragem} + ' m²'">Metragem</span></p>
+                        
+                        <div th:if="${!espaco.equipamentos.empty}">
+                            <p><strong>Equipamentos:</strong></p>
+                            <ul>
+                                <li th:each="equip : ${espaco.equipamentos}" th:text="${equip.nomeEquipamento}">Equipamento</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a th:href="@{/solicitante/solicitar/{id}(id=${espaco.id})}" class="btn btn-success w-100">
+                            <i class="bi bi-calendar-plus"></i> Solicitar Reserva
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer th:replace="fragments/layout :: footer"></footer>
+</body>
+</html>

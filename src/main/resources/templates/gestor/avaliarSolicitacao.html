@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout :: head('Avaliar Solicitação')"></head>
+<body>
+    <header th:replace="fragments/layout :: menu('solicitacoes-pendentes')"></header>
+    
+    <div class="container mt-4">
+        <h2>Avaliar Solicitação</h2>
+        
+        <div class="card mt-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0">Detalhes da Solicitação #<span th:text="${solicitacao.id}">ID</span></h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <p><strong>Solicitante:</strong> <span th:text="${solicitacao.solicitante.nome}">Solicitante</span></p>
+                        <p><strong>Espaço:</strong> <span th:text="${solicitacao.espacoFisico.nomeEspaco}">Espaço</span></p>
+                        <p><strong>Tipo de Espaço:</strong> <span th:text="${solicitacao.espacoFisico.tipoEspaco}">Tipo</span></p>
+                        <p><strong>Localização:</strong> <span th:text="${solicitacao.espacoFisico.localizacao}">Localização</span></p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Data da Reserva:</strong> <span th:text="${#temporals.format(solicitacao.dataReserva, 'dd/MM/yyyy')}">Data</span></p>
+                        <p><strong>Horário:</strong> <span th:text="${#temporals.format(solicitacao.horaInicioReserva, 'HH:mm')} + ' - ' + ${#temporals.format(solicitacao.horaFimReserva, 'HH:mm')}">Horário</span></p>
+                        <p><strong>Data da Solicitação:</strong> <span th:text="${#temporals.format(solicitacao.dataSolicitacao, 'dd/MM/yyyy HH:mm')}">Data da Solicitação</span></p>
+                        <p><strong>Status Atual:</strong> <span class="badge bg-warning">PENDENTE</span></p>
+                    </div>
+                </div>
+                
+                <form th:action="@{/gestor/avaliar}" method="post">
+                    <input type="hidden" name="idSolicitacao" th:value="${solicitacao.id}">
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Avaliação</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="novoStatus" id="statusAprovada" value="APROVADA" checked>
+                            <label class="form-check-label" for="statusAprovada">Aprovar Solicitação</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="novoStatus" id="statusRejeitada" value="REJEITADA">
+                            <label class="form-check-label" for="statusRejeitada">Rejeitar Solicitação</label>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3" id="justificativaDiv" style="display: none;">
+                        <label for="justificativa" class="form-label">Justificativa da Rejeição</label>
+                        <textarea class="form-control" id="justificativa" name="justificativa" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-check-circle"></i> Confirmar Avaliação
+                        </button>
+                        <a th:href="@{/gestor/solicitacoes}" class="btn btn-outline-secondary">Voltar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const statusRadios = document.querySelectorAll('input[name="novoStatus"]');
+            const justificativaDiv = document.getElementById('justificativaDiv');
+            
+            function toggleJustificativa() {
+                if (document.getElementById('statusRejeitada').checked) {
+                    justificativaDiv.style.display = 'block';
+                } else {
+                    justificativaDiv.style.display = 'none';
+                }
+            }
+            
+            statusRadios.forEach(radio => {
+                radio.addEventListener('change', toggleJustificativa);
+            });
+            
+            toggleJustificativa();
+        });
+    </script>
+    
+    <footer th:replace="fragments/layout :: footer"></footer>
+</body>
+</html>

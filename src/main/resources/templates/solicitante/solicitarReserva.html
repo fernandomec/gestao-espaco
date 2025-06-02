@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout :: head('Solicitar Reserva')"></head>
+<body>
+    <header th:replace="fragments/layout :: menu('espacos')"></header>
+    
+    <div class="container mt-4">
+        <h2>Solicitar Reserva</h2>
+        
+        <div class="card mt-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0" th:text="${espaco.nomeEspaco}">Nome do Espaço</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <p><strong>Tipo:</strong> <span th:text="${espaco.tipoEspaco}">Tipo</span></p>
+                        <p><strong>Capacidade:</strong> <span th:text="${espaco.capacidade} + ' pessoas'">Capacidade</span></p>
+                        <p><strong>Localização:</strong> <span th:text="${espaco.localizacao}">Localização</span></p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Metragem:</strong> <span th:text="${espaco.metragem} + ' m²'">Metragem</span></p>
+                        
+                        <div th:if="${!espaco.equipamentos.empty}">
+                            <p><strong>Equipamentos:</strong></p>
+                            <ul>
+                                <li th:each="equip : ${espaco.equipamentos}" th:text="${equip.nomeEquipamento}">Equipamento</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <form th:action="@{/solicitante/solicitar}" method="post">
+                    <input type="hidden" name="idEspaco" th:value="${espaco.id}">
+                    
+                    <div class="mb-3">
+                        <label for="dataReserva" class="form-label">Data da Reserva</label>
+                        <input type="date" class="form-control" id="dataReserva" name="dataReserva" required 
+                               th:min="${dataMinima}">
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="horaInicio" class="form-label">Hora de Início</label>
+                            <input type="time" class="form-control" id="horaInicio" name="horaInicio" required>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="horaFim" class="form-label">Hora de Término</label>
+                            <input type="time" class="form-control" id="horaFim" name="horaFim" required>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-calendar-check"></i> Enviar Solicitação
+                        </button>
+                        <a th:href="@{/solicitante/espacos}" class="btn btn-outline-secondary">Voltar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <footer th:replace="fragments/layout :: footer"></footer>
+</body>
+</html>

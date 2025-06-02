@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout :: head('Relatório de Solicitações')"></head>
+<body>
+    <header th:replace="fragments/layout :: menu('relatorios')"></header>
+    
+    <div class="container mt-4">
+        <h2>Relatório de Todas as Solicitações</h2>
+        
+        <div class="table-responsive mt-4">
+            <table class="table table-striped table-bordered">
+                <thead class="table-primary">
+                    <tr>
+                        <th>ID</th>
+                        <th>Solicitante</th>
+                        <th>Espaço</th>
+                        <th>Data da Reserva</th>
+                        <th>Horário</th>
+                        <th>Data da Solicitação</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="solicitacao : ${solicitacoes}">
+                        <td th:text="${solicitacao.id}">ID</td>
+                        <td th:text="${solicitacao.solicitante.nome}">Solicitante</td>
+                        <td th:text="${solicitacao.espacoFisico.nomeEspaco}">Espaço</td>
+                        <td th:text="${#temporals.format(solicitacao.dataReserva, 'dd/MM/yyyy')}">Data da Reserva</td>
+                        <td th:text="${#temporals.format(solicitacao.horaInicioReserva, 'HH:mm')} + ' - ' + ${#temporals.format(solicitacao.horaFimReserva, 'HH:mm')}">Horário</td>
+                        <td th:text="${#temporals.format(solicitacao.dataSolicitacao, 'dd/MM/yyyy HH:mm')}">Data da Solicitação</td>
+                        <td>
+                            <span class="badge" 
+                                  th:classappend="${solicitacao.statusSolicitacao == 'PENDENTE' ? 'bg-warning' : 
+                                                   (solicitacao.statusSolicitacao == 'APROVADA' ? 'bg-success' : 'bg-danger')}"
+                                  th:text="${solicitacao.statusSolicitacao}">Status</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <footer th:replace="fragments/layout :: footer"></footer>
+</body>
+</html>

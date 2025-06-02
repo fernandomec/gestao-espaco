@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout :: head('Auditoria')"></head>
+<body>
+    <header th:replace="fragments/layout :: menu('auditoria')"></header>
+    
+    <div class="container mt-4">
+        <h2>Registros de Auditoria</h2>
+        
+        <div th:if="${registros.empty}" class="alert alert-info mt-4">
+            <i class="bi bi-info-circle"></i> Não há registros de auditoria.
+        </div>
+        
+        <div class="table-responsive mt-4" th:unless="${registros.empty}">
+            <table class="table table-striped table-bordered">
+                <thead class="table-primary">
+                    <tr>
+                        <th>ID</th>
+                        <th>Usuário</th>
+                        <th>Data/Hora</th>
+                        <th>Tipo de Ação</th>
+                        <th>Detalhes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="registro : ${registros}">
+                        <td th:text="${registro.id}">ID</td>
+                        <td th:text="${registro.usuario.nome}">Usuário</td>
+                        <td th:text="${#temporals.format(registro.dataHoraAcao, 'dd/MM/yyyy HH:mm:ss')}">Data/Hora</td>
+                        <td th:text="${registro.tipoAcao}">Tipo de Ação</td>
+                        <td th:text="${registro.detalhesAcao}">Detalhes</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <footer th:replace="fragments/layout :: footer"></footer>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout :: head('Solicitações Aprovadas')"></head>
+<body>
+    <header th:replace="fragments/layout :: menu('solicitacoes-aprovadas')"></header>
+    
+    <div class="container mt-4">
+        <h2>Solicitações Aprovadas</h2>
+        
+        <div th:if="${solicitacoes.empty}" class="alert alert-info mt-4">
+            <i class="bi bi-info-circle"></i> Não há solicitações aprovadas.
+        </div>
+        
+        <div class="table-responsive mt-4" th:unless="${solicitacoes.empty}">
+            <table class="table table-striped table-hover">
+                <thead class="table-success">
+                    <tr>
+                        <th>ID</th>
+                        <th>Solicitante</th>
+                        <th>Espaço</th>
+                        <th>Data</th>
+                        <th>Horário</th>
+                        <th>Data da Solicitação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="solicitacao : ${solicitacoes}">
+                        <td th:text="${solicitacao.id}">ID</td>
+                        <td th:text="${solicitacao.solicitante.nome}">Solicitante</td>
+                        <td th:text="${solicitacao.espacoFisico.nomeEspaco}">Espaço</td>
+                        <td th:text="${#temporals.format(solicitacao.dataReserva, 'dd/MM/yyyy')}">Data</td>
+                        <td th:text="${#temporals.format(solicitacao.horaInicioReserva, 'HH:mm')} + ' - ' + ${#temporals.format(solicitacao.horaFimReserva, 'HH:mm')}">Horário</td>
+                        <td th:text="${#temporals.format(solicitacao.dataSolicitacao, 'dd/MM/yyyy HH:mm')}">Data da Solicitação</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <footer th:replace="fragments/layout :: footer"></footer>
+</body>
+</html>

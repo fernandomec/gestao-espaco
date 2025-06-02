@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout :: head('Relatório de Espaços')"></head>
+<body>
+    <header th:replace="fragments/layout :: menu('relatorios')"></header>
+    
+    <div class="container mt-4">
+        <h2>Relatório de Espaços Físicos</h2>
+        
+        <div class="table-responsive mt-4">
+            <table class="table table-striped table-bordered">
+                <thead class="table-primary">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Tipo</th>
+                        <th>Metragem</th>
+                        <th>Capacidade</th>
+                        <th>Localização</th>
+                        <th>Status</th>
+                        <th>Equipamentos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="espaco : ${espacos}">
+                        <td th:text="${espaco.id}">ID</td>
+                        <td th:text="${espaco.nomeEspaco}">Nome</td>
+                        <td th:text="${espaco.tipoEspaco}">Tipo</td>
+                        <td th:text="${espaco.metragem} + ' m²'">Metragem</td>
+                        <td th:text="${espaco.capacidade} + ' pessoas'">Capacidade</td>
+                        <td th:text="${espaco.localizacao}">Localização</td>
+                        <td>
+                            <span class="badge" 
+                                  th:classappend="${espaco.ativo ? 'bg-success' : 'bg-danger'}"
+                                  th:text="${espaco.ativo ? 'Ativo' : 'Inativo'}">Status</span>
+                        </td>
+                        <td>
+                            <ul class="list-unstyled mb-0">
+                                <li th:each="equip : ${espaco.equipamentos}" th:text="${equip.nomeEquipamento}">Equipamento</li>
+                                <li th:if="${espaco.equipamentos.empty}">Nenhum equipamento</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <footer th:replace="fragments/layout :: footer"></footer>
+</body>
+</html>
